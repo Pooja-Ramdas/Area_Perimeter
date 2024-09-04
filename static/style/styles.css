@@ -1,0 +1,170 @@
+body {
+    background-color: #f8f9fa; /* Light Gray background */
+    font-family: 'Helvetica', sans-serif !important;
+}
+
+h2 {
+    color: #343a40; /* Dark Gray */
+}
+
+.login-title {
+    font-family: 'Helvetica', sans-serif;
+    font-size: medium;
+    font-weight: bold;
+    color: #08090b; /* Dark Gray */
+}
+
+.form-control {
+    border-radius: 0.25rem;
+    border: 1px solid #ced4da;
+}
+
+.btn-primary {
+    background-color: #007bff; /* Blue */
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3; /* Darker Blue */
+}
+
+.nav-link {
+    position: relative;
+    padding-bottom: 5px; /* Adjust based on your design */
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 2px; /* Thickness of the underline */
+    background-color: #0c7ef8; /* Underline color */
+    transition: width 0.3s ease; /* Animation duration and easing */
+}
+
+.nav-link:hover::after {
+    width: 100%; /* Full width on hover */
+}
+
+.description-box {
+    margin-top: 3rem; /* Adjust this value to push the subtext down */
+    color: #8d8c8c; /* Optional: Set text color */
+    font-family: 'Rubik', sans-serif; /* Apply Rubik font */
+    font-size: 1rem; /* Adjust the font size if needed */
+    line-height: 1.8; /* Increase line spacing */
+}
+
+
+.hero-text {
+    position: relative; /* Needed for the pseudo-element positioning */
+    font-family: 'Helvetica', sans-serif;
+    font-size: 3rem; /* Adjust as needed */
+    font-weight: bold;
+    font-size: 1rem; /* Adjust the font size if needed */
+    line-height: 1.8; /* Increase this value to make the lines further apart */
+    margin-top: 1rem; /* Adjust top margin to add space above the subtext */
+    color: #555; /* Optional: Set text color */
+}
+
+.hero-text::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -10px; /* Adjust based on your font size and desired space */
+    width: 100%;
+    height: 0.7px; /* Thickness of the line */
+    color: #000;
+    background: rgba(0, 0, 0, 0.5); /* Shadow effect with semi-transparent color */
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 10); /* Adds a subtle shadow below the line */
+    border-radius: 2px; /* Optional: Rounds the edges of the line */
+}
+
+/* Scroll bar */
+/* Ensure the body takes the full height */
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+/* Apply overflow and styling to the body or a specific container */
+body {
+    overflow-y: scroll; /* Adds a vertical scrollbar if content overflows */
+    scrollbar-width: thin; /* For Firefox */
+    scrollbar-color: #007bff #e0f7fa; /* For Firefox: scrollbar color and track color */
+}
+
+/* Webkit browsers (Chrome, Safari) */
+body::-webkit-scrollbar {
+    width: 8px; /* Width of the scrollbar */
+}
+
+body::-webkit-scrollbar-thumb {
+    background-color: #007bff; /* Color of the scrollbar */
+    border-radius: 10px; /* Rounds the edges of the scrollbar */
+}
+
+body::-webkit-scrollbar-track {
+    background-color: #e0f7fa; /* Background color of the scrollbar track */
+}
+
+.icon-size {
+    font-size: 2.5rem; /* Adjust the size of the icons */
+    color: #031e08; /* Adjust the color of the icons */
+}
+
+.card {
+    background-color: #e6f9e6; 
+    border-width: 0px;
+    border-radius: 10px; 
+    transition: transform 0.3s ease-in-out; 
+}
+
+.card:hover {
+    transform: translateY(-5px); 
+}
+
+.card-title {
+    font-weight: bold; 
+    font-size: 1.25rem; 
+    color: #343a40; 
+}
+
+.semicircle {
+    position: absolute;
+    top: -100;
+    left: 0;
+    width: 100%;
+    height: 200px; /* Adjust this value to control the size of the semicircle */
+    background-color: #d4edda; /* Pale Green color */
+    border-bottom-left-radius: 50% 50px; /* Creates the semicircle effect */
+    border-bottom-right-radius: 50% 50px; /* Creates the semicircle effect */
+    z-index: -1; /* Ensure it is behind other content */
+}
+
+.why-pharmalink-container {
+    background-color: #000; /* Black background */
+    height: 500px;
+    width: auto;
+    padding: 0px;
+    display: inline-block;
+}
+
+.why-pharmalink {
+    color: #fff; /* White text */
+    margin: 10px; /* Remove default margin */
+    font-weight: bold;
+    font-size:70px;
+}
+
+.pharmalink-pointers {
+    list-style-type: circle; 
+    padding-top: 30px;
+    padding-left: 50px;
+}
+
+.pharmalink-pointers li {
+    margin-bottom: 10px; /* Space between each pointer */
+    font-weight: bold; /* Make the text bold */
+}
