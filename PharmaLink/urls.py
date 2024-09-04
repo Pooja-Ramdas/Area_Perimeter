@@ -22,5 +22,6 @@ from users import views as userv
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('' , mainv.index , name='homepage'),
-    path('login/' , userv.login , name='login')
+    path('login/' , userv.loginreq , name='login'),
+    path('logout/' , userv.logoutreq , name='logout')
 ]

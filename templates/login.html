@@ -11,20 +11,31 @@
     <link href="{% static  'style/styles.css' %}" rel="stylesheet"> 
 </head>
 <body>
+
+    {% if messages %}
+{% for message in messages %}
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>{{ message.tags }} :</strong>{{message}}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+{% endfor %}
+{% endif %}
+
     <div class="container d-flex justify-content-center align-items-center vh-100">
         <div class="login-container text-center">
             <img src="{% static 'img/logo.jpeg' %}" alt="Company Logo" class="logo mb-3" width="300" height="auto">
             <h1 class="login-title">Login</h1>
 
             <!-- Login Form -->
-            <form>
+            <form method="post" action="/login/" autocomplete="off" >
                 <div class="mb-3 text-start">
+                    {% csrf_token %}
                     <label for="username" class="form-label">Username</label>
-                    <input type="text" class="form-control" id="username" placeholder="Enter your username">
+                    <input type="text" class="form-control" name="loginusername" id="username" placeholder="Enter your username">
                 </div>
                 <div class="mb-3 text-start">
                     <label for="password" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="password" placeholder="Enter your password">
+                    <input type="password" class="form-control" name="loginpassword" id="password" placeholder="Enter your password">
                 </div>
                 <button type="submit" class="btn btn-primary w-100">Login</button>
             </form>
