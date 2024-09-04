@@ -27,3 +27,21 @@ To initialize Project , use
 To Run Project 
 
 `python manage.py runserver`
+
+Make sure to create `.env` file 
+
+In .env file , Write 
+
+```
+SECRET_KEY = <your-secret-key>
+```
+
+To create Secret key , Use this script 
+
+```
+from django.core.management.utils import get_random_secret_key
+
+print(get_random_secret_key())
+```
+
+You will get some output like `django-insecure <some-random-numbers` , That will be your secret key. 
