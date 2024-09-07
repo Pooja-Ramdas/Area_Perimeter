@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory List</title>
+</head>
+<body>
+    <h1>Inventory List</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Drug ID</th>
+                <th>Name</th>
+                <th>Manufacturer</th>
+                <th>Drug Type</th>
+                <th>Quantity</th>
+                <th>Expiry Date</th>
+                <th>Description</th>
+                <th>Batch No.</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for drug in drugs %}
+            <tr>
+                <td>{{ drug.drug_id }}</td>
+                <td>{{ drug.name }}</td>
+                <td>{{ drug.manufacturer }}</td>
+                <td>{{ drug.drug_type }}</td>
+                <td>{{ drug.quantity }}</td>
+                <td>{{ drug.expiry_date }}</td>
+                <td>{{ drug.description }}</td>
+                <td>{{ drug.batch_no }}</td>
+                <td>
+                    <button class="edit-button" data-id="{{ drug.drug_id }}">Edit</button>
+                    <button class="delete-button" data-id="{{ drug.drug_id }}">Delete</button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <button id="add-button">Add Drug</button>
+
+    <!-- Ajax script -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#add-button').click(function() {
+                // Handle add functionality
+            });
+    
+            $('.edit-button').click(function() {
+                const drugId = $(this).data('id');
+                // Handle edit functionality
+            });
+    
+            $('.delete-button').click(function() {
+                const drugId = $(this).data('id');
+                // Handle delete functionality
+            });
+        });
+    </script>
+    
+</body>
+</html>

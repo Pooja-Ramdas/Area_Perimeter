@@ -18,10 +18,12 @@ from django.contrib import admin
 from django.urls import path
 from main import views as mainv
 from users import views as userv
+from invtry import views as invv
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('' , mainv.index , name='homepage'),
     path('login/' , userv.loginreq , name='login'),
-    path('logout/' , userv.logoutreq , name='logout')
+    path('logout/' , userv.logoutreq , name='logout'),
+    path('inv/' , invv.inventory , name='inv')
 ]
