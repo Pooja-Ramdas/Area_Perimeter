@@ -20,17 +20,17 @@ h2 {
 }
 
 .btn-primary {
-    background-color: #007bff; /* Blue */
+    background-color: #000000; /* Black */
     border: none;
 }
 
 .btn-primary:hover {
-    background-color: #0056b3; /* Darker Blue */
+    background-color: #88acfa; /* Gradient Blue */
 }
 
 .nav-link {
     position: relative;
-    padding-bottom: 5px; /* Adjust based on your design */
+    padding-bottom: 5px; 
 }
 
 .nav-link::after {
@@ -41,7 +41,7 @@ h2 {
     width: 0;
     height: 2px; /* Thickness of the underline */
     background-color: #0c7ef8; /* Underline color */
-    transition: width 0.3s ease; /* Animation duration and easing */
+    transition: width 0.3s ease; 
 }
 
 .nav-link:hover::after {
@@ -49,9 +49,9 @@ h2 {
 }
 
 .description-box {
-    margin-top: 3rem; /* Adjust this value to push the subtext down */
+    margin-top: 3rem; /* to push the subtext down */
     color: #8d8c8c; /* Optional: Set text color */
-    font-family: 'Rubik', sans-serif; /* Apply Rubik font */
+    font-family: 'Rubik', sans-serif; 
     font-size: 1rem; /* Adjust the font size if needed */
     line-height: 1.8; /* Increase line spacing */
 }
@@ -62,10 +62,10 @@ h2 {
     font-family: 'Helvetica', sans-serif;
     font-size: 3rem; /* Adjust as needed */
     font-weight: bold;
-    font-size: 1rem; /* Adjust the font size if needed */
-    line-height: 1.8; /* Increase this value to make the lines further apart */
-    margin-top: 1rem; /* Adjust top margin to add space above the subtext */
-    color: #555; /* Optional: Set text color */
+    font-size: 1rem; 
+    line-height: 1.8; 
+    margin-top: 1rem; 
+    color: #555; 
 }
 
 .hero-text::after {
