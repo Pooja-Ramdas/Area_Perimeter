@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expiring Soon</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-4 mb-4">Expiring Soon</h1>
+        <table class="table table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th>DrugID</th>
+                    <th>Name</th>
+                    <th>Manufacturer</th>
+                    <th>Drug Type</th>
+                    <th>Quantity</th>
+                    <th>Expiry Date</th>
+                    <th>Description</th>
+                    <th>Batch no</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Replace with dynamic data -->
+                <tr>
+                    <td>001</td>
+                    <td>Drug A</td>
+                    <td>Manufacturer X</td>
+                    <td>Type 1</td>
+                    <td>10</td>
+                    <td>2024-09-30</td>
+                    <td>Description A</td>
+                    <td>Batch 1</td>
+                </tr>
+                <tr>
+                    <td>002</td>
+                    <td>Drug B</td>
+                    <td>Manufacturer Y</td>
+                    <td>Type 2</td>
+                    <td>5</td>
+                    <td>2024-10-15</td>
+                    <td>Description B</td>
+                    <td>Batch 2</td>
+                </tr>
+               
+            </tbody>
+        </table>
+    </div>
+
+    
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

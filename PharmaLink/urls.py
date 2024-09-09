@@ -25,5 +25,10 @@ urlpatterns = [
     path('' , mainv.index , name='homepage'),
     path('login/' , userv.loginreq , name='login'),
     path('logout/' , userv.logoutreq , name='logout'),
-    path('inv/' , invv.inventory , name='inv')
+    path('inv/' , invv.inventory , name='inv'),
+    path('api/add_drug' , invv.add_drug , name='add_drug'),
+    path('api/delete_drug/', invv.delete_drug, name='delete_drug'),
+    path('api/update_drug/', invv.update_drug, name='update_drug'),
+    path('api/list_drugs/', invv.drug_list, name='list_drugs'),
+    path('dashboard/' , invv.dashboard , name='dashboard')
 ]

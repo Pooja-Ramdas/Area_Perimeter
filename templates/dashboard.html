@@ -1,0 +1,185 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css">
+ 
+
+    <style>
+        body {
+            font-family: 'Helvetica', sans-serif;
+            background-color: #f0f4f8;
+            padding: 20px;
+            margin: 0;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.5em;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .tile h2 {
+        margin-bottom: 10px;
+        color: #555;
+        text-align: left; /* Add this line */
+        width: 100%; /* Ensure the width is 100% to align properly */
+        }
+
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr; 
+            grid-template-rows: auto auto; 
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .tile {
+            padding: 20px;
+            border-radius: 15px;
+            background-color: #e3f2fd; 
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start; /* Align items to the start (top) */
+            justify-content: flex-start; /* Align items to the start (top) */
+        }
+
+        .tile.alerts {
+            background-color: #bbdefb;
+            grid-column: 1; 
+            grid-row: span 1; 
+        }
+        .tile.trends {
+            background-color: #c8e6c9;
+            grid-column: 2; 
+            grid-row: span 2;
+        }
+        .tile.top-medicines {
+            background-color: #ffe0b2;
+            grid-column: 3; 
+            grid-row: span 2;
+        }
+        .tile.order-alerts {
+            background-color: #d1c4e9;
+            grid-column: 1; 
+            grid-row: span 4;
+        }
+        .tile.sales-forecast {
+            background-color: #e1bee7; 
+            grid-column: 2;
+            grid-row: 3;
+        }
+        .tile h2 {
+            margin-bottom: 10px;
+            color: #555;
+        }
+        .tile .arrow-link {
+            margin-top: 15px;
+            color: #0d47a1;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .alert-container {
+            background-color: #e1e5fc;
+            padding: 15px;
+            border-radius: 15px;
+            width: 100%; 
+            box-sizing: border-box;
+        }
+        .alert-item {
+            display: flex;
+            align-items: center; /* Align items vertically center */
+            margin-bottom: 10px;
+        }
+        .alert-item:last-child {
+            margin-bottom: 0;
+        }
+        .alert-title {
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .alert-count {
+            background-color: #f04f4f;
+            color: white;
+            padding: 5px; /* Adjust padding to fit content */
+            border-radius: 50%; /* Make the element a circle */
+            font-size: 14px;
+            font-weight: bold;
+            width: 12px; /* Ensure width and height are equal for a perfect circle */
+            height: 12px; /* Ensure width and height are equal for a perfect circle */
+            display: flex;
+            align-items: center; /* Center content vertically */
+            justify-content: center; /* Center content horizontally */
+            margin-left: 10px; /* Add space between circle and text */
+        }
+        .alert-link {
+            text-decoration: none;
+            color: black;
+            font-size: 18px;
+            font-weight: bold;
+            margin-left: auto;
+        }
+
+    </style>
+</head>
+<body>
+
+    <h1>Dashboard</h1>
+
+    <div class="dashboard-container">
+        <div class="tile alerts">
+            <h2>Alerts</h2>
+            <div class="alert-container">
+                <div class="alert-item">
+                    <span class="alert-title">Expiring soon</span>
+                    <span class="alert-count">4</span>
+                    <a href="/expiring-soon" class="alert-link">
+                        <i class="bi bi-arrow-right-circle"></i>  
+                    </a>                    
+                </div>
+                <div class="alert-item">
+                    <span class="alert-title">Low stock</span>
+                    <span class="alert-count">2</span>
+                    <a href="/low-stock" class="alert-link">
+                        <i class="bi bi-arrow-right-circle"></i>
+                    </a>
+                </div>
+                
+            </div>
+        </div>
+        <div class="tile trends">
+            <h2>Trends</h2>
+            <p>Consumption trends this</p>
+            {{ forecast_html | safe }}
+        </div>
+        <div class="tile top-medicines">
+            <h2>Stats</h2>
+            <ul>
+                <li>Medicine 1</li>
+                <li>Medicine 2</li>
+            </ul>
+        </div>
+        <div class="tile order-alerts">
+            <h2>Order Alerts</h2>
+            <p>Latest order notifications</p>
+        </div>
+        <div class="tile sales-forecast">
+            <h2>Sales Forecast</h2>
+            <!-- Graph placeholder -->
+            <div style="width: 100%; height: 200px; background-color: #eceff1; border-radius: 10px;">
+                <!-- Insert graph here -->
+                 {{ graph_html | safe}}
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src= "{% static 'script/dash.js' %}" "></script>
+</body>
+</html>

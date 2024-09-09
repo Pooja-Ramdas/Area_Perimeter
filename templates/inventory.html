@@ -3,65 +3,426 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inventory List</title>
+    <title>Inventory</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Helvetica, sans-serif;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            width: 80%;
+            margin: 50px auto;
+        }
+
+        h1 {
+            text-align: left;
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .add-button {
+            display: inline-block;
+            margin-left: auto;
+            background-color: green;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+            float: right;
+        }
+
+        .add-button i {
+            margin-right: 5px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+
+        th {
+            background-color: #333;
+            color: white;
+            font-weight: bold;
+            padding: 15px 10px;
+            text-align: left;
+            border: 1px solid lightgrey;
+
+        }
+
+        td {
+            padding: 15px 10px;
+            text-align: left;
+            background-color: #fff;
+            color: #333;
+            border: 1px solid lightgrey;
+        }
+
+        tr:nth-child(even) td {
+            background-color: #f2f2f2;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-buttons button {
+            border: none;
+            color: white;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 14px;
+            border-radius: 5px;
+        }
+
+        .edit-button {
+            background-color: grey;
+        }
+
+        .delete-btn {
+            background-color: red;
+            border: 0px;
+        }
+
+        .edit-button i,
+        .delete-button i,
+        .add-button i {
+            margin-right: 5px;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0, 0, 0);
+            background-color: rgba(0, 0, 0, 0.4);
+            padding-top: 60px;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 10px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .modal input[type="text"],
+        .modal input[type="number"],
+        .modal input[type="date"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .modal .save-button {
+            background-color: green;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+
+        .modal .save-button:hover {
+            background-color: darkgreen;
+        }
+    </style>
 </head>
 <body>
-    <h1>Inventory List</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>Drug ID</th>
-                <th>Name</th>
-                <th>Manufacturer</th>
-                <th>Drug Type</th>
-                <th>Quantity</th>
-                <th>Expiry Date</th>
-                <th>Description</th>
-                <th>Batch No.</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for drug in drugs %}
-            <tr>
-                <td>{{ drug.drug_id }}</td>
-                <td>{{ drug.name }}</td>
-                <td>{{ drug.manufacturer }}</td>
-                <td>{{ drug.drug_type }}</td>
-                <td>{{ drug.quantity }}</td>
-                <td>{{ drug.expiry_date }}</td>
-                <td>{{ drug.description }}</td>
-                <td>{{ drug.batch_no }}</td>
-                <td>
-                    <button class="edit-button" data-id="{{ drug.drug_id }}">Edit</button>
-                    <button class="delete-button" data-id="{{ drug.drug_id }}">Delete</button>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div class="container">
+        <h1>INVENTORY</h1>
+        <button class="add-button" id="open-modal"><i class="fas fa-plus"></i> Add Drug</button>
+        <table>
+            <thead>
+                <tr>
+                    <th>DrugID</th>
+                    <th>Name</th>
+                    <th>Manufacturer</th>
+                    <th>Drug Type</th>
+                    <th>Quantity</th>
+                    <th>Expiry Date</th>
+                    <th>Description</th>
+                    <th>Batch No.</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="drug-table-body">
+                <!-- Example row -->
+                <tr data-drug-id="001">
+                    <td>001</td>
+                    <td>Aspirin</td>
+                    <td>Bayer</td>
+                    <td>Tablet</td>
+                    <td>100</td>
+                    <td>2025-12-01</td>
+                    <td>Pain reliever</td>
+                    <td>AB12345</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="edit-button"><i class="fas fa-edit"></i>Edit</button>
+                            <button class="delete-btn"><i class="fas fa-minus"></i> Delete</button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
-    <button id="add-button">Add Drug</button>
+    <!-- Add Modal -->
+    <div id="add-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Add Drug</h2>
+            <form id="add-drug-form">
+                <input type="text" id="drug-id" placeholder="Drug ID" required>
+                <input type="text" id="drug-name" placeholder="Name" required>
+                <input type="text" id="manufacturer" placeholder="Manufacturer" required>
+                <input type="text" id="drug-type" placeholder="Drug Type" required>
+                <input type="number" id="quantity" placeholder="Quantity" required>
+                <input type="date" id="expiry-date" placeholder="Expiry Date" required>
+                <input type="text" id="description" placeholder="Description" required>
+                <input type="text" id="batch-no" placeholder="Batch No." required>
+                <button type="submit" class="save-button">Save</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div id="edit-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-edit">&times;</span>
+            <h2>Edit Drug</h2>
+            <form id="edit-drug-form">
+                <input type="text" id="edit-drug-id" placeholder="Drug ID" required>
+                <input type="text" id="edit-drug-name" placeholder="Name" required>
+                <input type="text" id="edit-manufacturer" placeholder="Manufacturer" required>
+                <input type="text" id="edit-drug-type" placeholder="Drug Type" required>
+                <input type="number" id="edit-quantity" placeholder="Quantity" required>
+                <input type="date" id="edit-expiry-date" placeholder="Expiry Date" required>
+                <input type="text" id="edit-description" placeholder="Description" required>
+                <input type="text" id="edit-batch-no" placeholder="Batch No." required>
+                <input type="hidden" id="edit-row-index"> <!-- To keep track of the row index -->
+                <button type="submit" class="save-button">Save</button>
+            </form>
+        </div>
+    </div>
 
     <!-- Ajax script -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        $(document).ready(function() {
-            $('#add-button').click(function() {
-                // Handle add functionality
+        $(document).ready(function () {
+            // Add Drug Modal
+            var addModal = document.getElementById("add-modal");
+            var openModalBtn = document.getElementById("open-modal");
+            var closeModalBtn = document.getElementsByClassName("close")[0];
+
+            openModalBtn.onclick = function () {
+                addModal.style.display = "block";
+            }
+
+            closeModalBtn.onclick = function () {
+                addModal.style.display = "none";
+            }
+
+            window.onclick = function (event) {
+                if (event.target == addModal) {
+                    addModal.style.display = "none";
+                }
+            }
+
+            // Add Drug Form Submission
+            $('#add-drug-form').submit(function (event) {
+                event.preventDefault();
+
+                var newRow = `
+                    <tr data-drug-id="${$('#drug-id').val()}">
+                        <td>${$('#drug-id').val()}</td>
+                        <td>${$('#drug-name').val()}</td>
+                        <td>${$('#manufacturer').val()}</td>
+                        <td>${$('#drug-type').val()}</td>
+                        <td>${$('#quantity').val()}</td>
+                        <td>${$('#expiry-date').val()}</td>
+                        <td>${$('#description').val()}</td>
+                        <td>${$('#batch-no').val()}</td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="edit-button"><i class="fas fa-edit"></i>Edit</button>
+                                <button class="delete-btn"><i class="fas fa-minus"></i> Delete</button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+
+                $('#drug-table-body').append(newRow);
+                addModal.style.display = "none";
+                $('#add-drug-form')[0].reset();
             });
-    
-            $('.edit-button').click(function() {
-                const drugId = $(this).data('id');
-                // Handle edit functionality
+
+            // Edit Drug Modal
+            var editModal = document.getElementById("edit-modal");
+            var closeEditBtn = document.getElementsByClassName("close-edit")[0];
+
+            $(document).on('click', '.edit-button', function () {
+                var row = $(this).closest('tr');
+                $('#edit-drug-id').val(row.find('td').eq(0).text());
+                $('#edit-drug-name').val(row.find('td').eq(1).text());
+                $('#edit-manufacturer').val(row.find('td').eq(2).text());
+                $('#edit-drug-type').val(row.find('td').eq(3).text());
+                $('#edit-quantity').val(row.find('td').eq(4).text());
+                $('#edit-expiry-date').val(row.find('td').eq(5).text());
+                $('#edit-description').val(row.find('td').eq(6).text());
+                $('#edit-batch-no').val(row.find('td').eq(7).text());
+                $('#edit-row-index').val(row.index());
+                editModal.style.display = "block";
             });
-    
-            $('.delete-button').click(function() {
-                const drugId = $(this).data('id');
-                // Handle delete functionality
+
+            closeEditBtn.onclick = function () {
+                editModal.style.display = "none";
+            }
+
+            window.onclick = function (event) {
+                if (event.target == editModal) {
+                    editModal.style.display = "none";
+                }
+            }
+
+            // Edit Drug Form Submission
+            $('#edit-drug-form').submit(function (event) {
+                event.preventDefault();
+
+                var index = $('#edit-row-index').val();
+                var updatedRow = `
+                    <tr data-drug-id="${$('#edit-drug-id').val()}">
+                        <td>${$('#edit-drug-id').val()}</td>
+                        <td>${$('#edit-drug-name').val()}</td>
+                        <td>${$('#edit-manufacturer').val()}</td>
+                        <td>${$('#edit-drug-type').val()}</td>
+                        <td>${$('#edit-quantity').val()}</td>
+                        <td>${$('#edit-expiry-date').val()}</td>
+                        <td>${$('#edit-description').val()}</td>
+                        <td>${$('#edit-batch-no').val()}</td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="edit-button"><i class="fas fa-edit"></i>Edit</button>
+                                <button class="delete-btn"><i class="fas fa-minus"></i> Delete</button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+
+                $('#drug-table-body tr').eq(index).replaceWith(updatedRow);
+                editModal.style.display = "none";
+
+                // Make AJAX request to update the item
+                makeUpdateRequest($('#edit-drug-id').val(), {
+                    name: $('#edit-drug-name').val(),
+                    manufacturer: $('#edit-manufacturer').val(),
+                    drug_type: $('#edit-drug-type').val(),
+                    quantity: $('#edit-quantity').val(),
+                    expiry_date: $('#edit-expiry-date').val(),
+                    description: $('#edit-description').val(),
+                    batch_no: $('#edit-batch-no').val()
+                });
             });
+
+            // Delete Drug Functionality
+            $(document).on('click', '.delete-btn', function (event) {
+                event.preventDefault();
+
+                const password = prompt('Please enter your password to delete:');
+
+                if (password === null || password === "") {
+                    alert("Deletion cancelled.");
+                    return;
+                }
+
+                if (validatePassword(password)) {
+                    const row = $(this).closest('tr');
+                    const drugId = row.data('drug-id');
+
+                    makeDeleteRequest(drugId, row);
+                } else {
+                    alert("Incorrect password. Deletion aborted.");
+                }
+            });
+
+            function validatePassword(password) {
+                return password === "112";
+            }
+
+            function makeDeleteRequest(drugId, row) {
+                fetch(`/api/delete_drug/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken')
+                    },
+                    body: JSON.stringify({ 'drug_id': drugId })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        row.remove();
+                        alert("Drug deleted successfully.");
+                    } else {
+                        alert("Failed to delete drug.");
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert("An error occurred while deleting the drug.");
+                });
+            }
+
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
         });
     </script>
-    
 </body>
 </html>
