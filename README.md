@@ -45,3 +45,6 @@ print(get_random_secret_key())
 ```
 
 You will get some output like `django-insecure <some-random-numbers` , That will be your secret key. 
+
+
+Use `python manage.py add_sample_drugs` command to add sample drugs to database
