@@ -6,7 +6,7 @@
     <title>Inventory</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        body {
+body {
             font-family: Helvetica, sans-serif;
             background-color: #f4f4f4;
         }
@@ -181,23 +181,7 @@
                 </tr>
             </thead>
             <tbody id="drug-table-body">
-                <!-- Example row -->
-                <tr data-drug-id="001">
-                    <td>001</td>
-                    <td>Aspirin</td>
-                    <td>Bayer</td>
-                    <td>Tablet</td>
-                    <td>100</td>
-                    <td>2025-12-01</td>
-                    <td>Pain reliever</td>
-                    <td>AB12345</td>
-                    <td>
-                        <div class="action-buttons">
-                            <button class="edit-button"><i class="fas fa-edit"></i>Edit</button>
-                            <button class="delete-btn"><i class="fas fa-minus"></i> Delete</button>
-                        </div>
-                    </td>
-                </tr>
+                <!-- Rows will be dynamically inserted here -->
             </tbody>
         </table>
     </div>
@@ -227,7 +211,7 @@
             <span class="close-edit">&times;</span>
             <h2>Edit Drug</h2>
             <form id="edit-drug-form">
-                <input type="text" id="edit-drug-id" placeholder="Drug ID" required>
+                <input type="text" id="edit-drug-id" placeholder="Drug ID" disabled>
                 <input type="text" id="edit-drug-name" placeholder="Name" required>
                 <input type="text" id="edit-manufacturer" placeholder="Manufacturer" required>
                 <input type="text" id="edit-drug-type" placeholder="Drug Type" required>
@@ -259,37 +243,100 @@
             }
 
             window.onclick = function (event) {
-                if (event.target == addModal) {
+                if (event.target == addModal || event.target == editModal) {
                     addModal.style.display = "none";
+                    editModal.style.display = "none";
                 }
             }
 
-            // Add Drug Form Submission
+            $(document).ready(function() {
+    // Fetch existing drug data and populate the table
+    function loadDrugs() {
+        $.ajax({
+            url: '/api/drug_list/',  // Ensure this matches your Django URL pattern
+            type: 'GET',
+            success: function(data) {
+                $('#drug-table-body').empty(); // Clear existing rows
+
+                // Iterate over the drugs and append them to the table
+                data.forEach(function(drug) {
+                    var row = `
+                        <tr data-drug-id="${drug.drugid}">
+                            <td>${drug.drugid}</td>
+                            <td>${drug.name}</td>
+                            <td>${drug.manufacturer}</td>
+                            <td>${drug.drugtype}</td>
+                            <td>${drug.quantity}</td>
+                            <td>${drug.expirydate}</td>
+                            <td>${drug.description}</td>
+                            <td>${drug.batchno}</td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="edit-button"><i class="fas fa-edit"></i>Edit</button>
+                                    <button class="delete-btn"><i class="fas fa-minus"></i> Delete</button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                    $('#drug-table-body').append(row);
+                });
+            },
+            error: function() {
+                alert("Failed to load drug data.");
+            }
+        });
+    }
+
+    loadDrugs();
+});
             $('#add-drug-form').submit(function (event) {
                 event.preventDefault();
 
-                var newRow = `
-                    <tr data-drug-id="${$('#drug-id').val()}">
-                        <td>${$('#drug-id').val()}</td>
-                        <td>${$('#drug-name').val()}</td>
-                        <td>${$('#manufacturer').val()}</td>
-                        <td>${$('#drug-type').val()}</td>
-                        <td>${$('#quantity').val()}</td>
-                        <td>${$('#expiry-date').val()}</td>
-                        <td>${$('#description').val()}</td>
-                        <td>${$('#batch-no').val()}</td>
-                        <td>
-                            <div class="action-buttons">
-                                <button class="edit-button"><i class="fas fa-edit"></i>Edit</button>
-                                <button class="delete-btn"><i class="fas fa-minus"></i> Delete</button>
-                            </div>
-                        </td>
-                    </tr>
-                `;
-
-                $('#drug-table-body').append(newRow);
-                addModal.style.display = "none";
-                $('#add-drug-form')[0].reset();
+                $.ajax({
+                    url: '/api/add_drug/',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        'drug_id': $('#drug-id').val(),
+                        'name': $('#drug-name').val(),
+                        'manufacturer': $('#manufacturer').val(),
+                        'drug_type': $('#drug-type').val(),
+                        'quantity': $('#quantity').val(),
+                        'expiry_date': $('#expiry-date').val(),
+                        'description': $('#description').val(),
+                        'batch_no': $('#batch-no').val()
+                    }),
+                    success: function (response) {
+                        if (response.status === 'success') {
+                            var newRow = `
+                                <tr data-drug-id="${$('#drug-id').val()}">
+                                    <td>${$('#drug-id').val()}</td>
+                                    <td>${$('#drug-name').val()}</td>
+                                    <td>${$('#manufacturer').val()}</td>
+                                    <td>${$('#drug-type').val()}</td>
+                                    <td>${$('#quantity').val()}</td>
+                                    <td>${$('#expiry-date').val()}</td>
+                                    <td>${$('#description').val()}</td>
+                                    <td>${$('#batch-no').val()}</td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="edit-button"><i class="fas fa-edit"></i>Edit</button>
+                                            <button class="delete-btn"><i class="fas fa-minus"></i> Delete</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            `;
+                            $('#drug-table-body').append(newRow);
+                            addModal.style.display = "none";
+                            $('#add-drug-form')[0].reset();
+                        } else {
+                            alert("Failed to add drug.");
+                        }
+                    },
+                    error: function () {
+                        alert("An error occurred while adding the drug.");
+                    }
+                });
             });
 
             // Edit Drug Modal
@@ -314,48 +361,56 @@
                 editModal.style.display = "none";
             }
 
-            window.onclick = function (event) {
-                if (event.target == editModal) {
-                    editModal.style.display = "none";
-                }
-            }
-
             // Edit Drug Form Submission
             $('#edit-drug-form').submit(function (event) {
                 event.preventDefault();
 
                 var index = $('#edit-row-index').val();
-                var updatedRow = `
-                    <tr data-drug-id="${$('#edit-drug-id').val()}">
-                        <td>${$('#edit-drug-id').val()}</td>
-                        <td>${$('#edit-drug-name').val()}</td>
-                        <td>${$('#edit-manufacturer').val()}</td>
-                        <td>${$('#edit-drug-type').val()}</td>
-                        <td>${$('#edit-quantity').val()}</td>
-                        <td>${$('#edit-expiry-date').val()}</td>
-                        <td>${$('#edit-description').val()}</td>
-                        <td>${$('#edit-batch-no').val()}</td>
-                        <td>
-                            <div class="action-buttons">
-                                <button class="edit-button"><i class="fas fa-edit"></i>Edit</button>
-                                <button class="delete-btn"><i class="fas fa-minus"></i> Delete</button>
-                            </div>
-                        </td>
-                    </tr>
-                `;
 
-                $('#drug-table-body tr').eq(index).replaceWith(updatedRow);
-                editModal.style.display = "none";
+                $.ajax({
+                    url: '/api/update_drug/',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        'drug_id': $('#edit-drug-id').val(),
+                        'name': $('#edit-drug-name').val(),
+                        'manufacturer': $('#edit-manufacturer').val(),
+                        'drug_type': $('#edit-drug-type').val(),
+                        'quantity': $('#edit-quantity').val(),
+                        'expiry_date': $('#edit-expiry-date').val(),
+                        'description': $('#edit-description').val(),
+                        'batch_no': $('#edit-batch-no').val()
+                    }),
+                    success: function (response) {
+                        if (response.status === 'success') {
+                            var updatedRow = `
+                                <tr data-drug-id="${$('#edit-drug-id').val()}">
+                                    <td>${$('#edit-drug-id').val()}</td>
+                                    <td>${$('#edit-drug-name').val()}</td>
+                                    <td>${$('#edit-manufacturer').val()}</td>
+                                    <td>${$('#edit-drug-type').val()}</td>
+                                    <td>${$('#edit-quantity').val()}</td>
+                                    <td>${$('#edit-expiry-date').val()}</td>
+                                    <td>${$('#edit-description').val()}</td>
+                                    <td>${$('#edit-batch-no').val()}</td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="edit-button"><i class="fas fa-edit"></i>Edit</button>
+                                            <button class="delete-btn"><i class="fas fa-minus"></i> Delete</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            `;
 
-                // Make AJAX request to update the item
-                makeUpdateRequest($('#edit-drug-id').val(), {
-                    name: $('#edit-drug-name').val(),
-                    manufacturer: $('#edit-manufacturer').val(),
-                    drug_type: $('#edit-drug-type').val(),
-                    quantity: $('#edit-quantity').val(),
-                    expiry_date: $('#edit-expiry-date').val(),
-                    description: $('#edit-description').val(),
-                    batch_no: $('#edit-batch-no').val()
+                            $('#drug-table-body tr').eq(index).replaceWith(updatedRow);
+                            editModal.style.display = "none";
+                        } else {
+                            alert("Failed to update drug.");
+                        }
+                    },
+                    error: function () {
+                        alert("An error occurred while updating the drug.");
+                    }
                 });
             });
 
@@ -374,53 +429,30 @@
                     const row = $(this).closest('tr');
                     const drugId = row.data('drug-id');
 
-                    makeDeleteRequest(drugId, row);
+                    $.ajax({
+                        url: '/api/delete_drug/',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify({ 'drug_id': drugId }),
+                        success: function (response) {
+                            if (response.status === 'success') {
+                                row.remove();
+                                alert("Drug deleted successfully.");
+                            } else {
+                                alert("Failed to delete drug.");
+                            }
+                        },
+                        error: function () {
+                            alert("An error occurred while deleting the drug.");
+                        }
+                    });
                 } else {
                     alert("Incorrect password. Deletion aborted.");
                 }
             });
 
             function validatePassword(password) {
-                return password === "112";
-            }
-
-            function makeDeleteRequest(drugId, row) {
-                fetch(`/api/delete_drug/`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': getCookie('csrftoken')
-                    },
-                    body: JSON.stringify({ 'drug_id': drugId })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.status === 'success') {
-                        row.remove();
-                        alert("Drug deleted successfully.");
-                    } else {
-                        alert("Failed to delete drug.");
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert("An error occurred while deleting the drug.");
-                });
-            }
-
-            function getCookie(name) {
-                let cookieValue = null;
-                if (document.cookie && document.cookie !== '') {
-                    const cookies = document.cookie.split(';');
-                    for (let i = 0; i < cookies.length; i++) {
-                        const cookie = cookies[i].trim();
-                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                            break;
-                        }
-                    }
-                }
-                return cookieValue;
+                return password === "112"; // Replace this with actual password validation logic
             }
         });
     </script>
