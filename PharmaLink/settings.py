@@ -45,7 +45,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'main.apps.MainConfig',
     'users.apps.UsersConfig',
-    'invtry.apps.InvtryConfig'
+    'invtry.apps.InvtryConfig',
+    'django_dashboard',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
