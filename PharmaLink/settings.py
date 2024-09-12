@@ -46,8 +46,6 @@ INSTALLED_APPS = [
     'main.apps.MainConfig',
     'users.apps.UsersConfig',
     'invtry.apps.InvtryConfig',
-    'django_dashboard',
-    'rest_framework',
 ]
 
 MIDDLEWARE = [
